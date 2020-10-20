@@ -8,13 +8,13 @@ from pyftpdlib.servers import FTPServer
 FTP_PORT = 2121
 
 # The name of the FTP user that can log in.
-FTP_USER = "myuser"
+FTP_USER = "purple"
 
 # The FTP user's password.
-FTP_PASSWORD = "change_this_password"
+FTP_PASSWORD = "purp"
 
 # The directory the FTP user will have full read/write access to.
-FTP_DIRECTORY = "/srv/users/SYSUSER/apps/APPNAME/public/"
+FTP_DIRECTORY = "/home/logan/Documents/FTP_SHARE/"
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
     # Optionally specify range of ports to use for passive connections.
     #handler.passive_ports = range(60000, 65535)
 
-    address = ('', FTP_PORT)
+    address = ("127.0.1.1", FTP_PORT)
     server = FTPServer(address, handler)
 
     server.max_cons = 256

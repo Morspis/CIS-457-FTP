@@ -14,14 +14,16 @@ def downloadFile():
 ftp = FTP('')
 
 #CONNECT PROMPT
-
+serverprompt = input("Enter server name or IP: ")
+portprompt = input("Enter port number: ")
 #CONNECT
-ftp.connect('localhost',1026)
+ftp.connect(serverprompt,portprompt)
 ftp.login()
 ftp.cwd('directory_name') #replace with your directory
 
 
 #ACTION PROMPT
+
 #LIST
 ftp.retrlines('LIST')
 #STORE
