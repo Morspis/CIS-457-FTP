@@ -14,7 +14,7 @@ FTP_USER = "purple"
 FTP_PASSWORD = "purp"
 
 # The directory the FTP user will have full read/write access to.
-FTP_DIRECTORY = "/home/logan/Documents/FTP_SHARE/"
+FTP_DIRECTORY = "I:\FTP"
 
 
 def main():
