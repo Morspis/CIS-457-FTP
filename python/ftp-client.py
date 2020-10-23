@@ -1,7 +1,14 @@
 from ftplib import FTP
 
 
-# ACTION PROMPT / MAIN MENU
+'''
+ACTION PROMPT / MAIN MENU
+
+This method displays the main menu only AFTER the user has made a connection to an FTP server.
+Options are presented as numeric input choices, with the user selecting by number. Generally,
+more information is needed for the operation and thus a prompt follows. Is called after
+an operation, after connection, and if ghe user's input was invalid. 
+'''
 def mainMenu():
     userChoice = 0
     choices = ['1', '2', '3', '4', '5']
@@ -25,26 +32,44 @@ def mainMenu():
 
     return userChoice
 
+'''
+UPLOAD FILE
 
-# UPLOAD FILE
+This is the method for file upload. After being prompted for the name of the
+file to upload, it sends the FTP server the necessary data for upload (binary).
+'''
 def uploadFile(ftp):
     print("Enter the file to upload: ")
     filename = input()
-    ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
+    try:
+        ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
+    except:
+        print("Could not upload file '" + filename + "'. Returning to menu...")
 
+'''
+DOWNLOAD FILE
 
-# DOWNLOAD FILE
+Method for downloading a file. After giving the name of the file to download,
+a new file of the same name is opened on the client device, and the file data is
+written to that file, which is promptly closed. 
+'''
 def downloadFile(ftp):
     print("Enter the file to download")
     filename = input()  # replace with your file in the directory ('directory_name')
-    localfile = open(filename, 'wb')
-    ftp.retrbinary('RETR ' + filename, localfile.write, 1024)
-    localfile.close()
+    try:
+        localfile = open(filename, 'wb')
+        ftp.retrbinary('RETR ' + filename, localfile.write, 1024)
+        localfile.close()
+    except:
+        print("Could not download file '" + filename + "'. Returning to menu...")
 
 
-# CONNECT PROMPT
+'''
+CONNECT PROMPT AND CONNECT
 
-# CONNECT
+Prompts the user for the URI, PORT, and USERNAME/PASSWORD credentials
+for the FTP server to connect to. If the connection fails, program closes.
+'''
 def connect(ftp):
     print("Enter the URI and PORT to connect to below: ")
     print("URI: ")
@@ -55,33 +80,50 @@ def connect(ftp):
     USERNAME = input()
     print("PASSWORD: ")
     PASSWORD = input()
-    ftp.connect(URI, PORT)
-    ftp.login(user=USERNAME, passwd=PASSWORD)
+    try:
+        ftp.connect(URI, PORT)
+        ftp.login(user=USERNAME, passwd=PASSWORD)
+    except:
+        print("Connection failed. Closing...")
+        return 0 # return 0 on failure
+
+    return 1 #return 1 if succesful
 
 
+'''
+CWD
+
+Command to change working direcory of the file server. 
+If the desired change is not possible, communicates and returns to menu.
+'''
 def changeWorkingDirectory(ftp):
     print("Enter the directory to change to: ")
     directory = input()
-    ftp.cwd(directory)
+    try:
+        ftp.cwd(directory)
+    except:
+        print("Could not change to directory '" + directory + "'. Returning to menu...")
 
+'''
+LIST
 
-# LIST
+Lists the files and directories in the current working directory.
+'''
 def listFiles(ftp):
     ftp.retrlines('LIST')
 
+'''
+MAIN FUNCTION
 
-# STORE
-# uploadFile()
-# RETRIEVE
-# downloadFile()
-
-
+Contains the composed logic for the script itself, comprised of
+above functions and branch logic. 
+'''
 def main():
     ftp = FTP('')
-    connect(ftp)
-    userChoice = 0
 
-    while (userChoice != 5):
+    userChoice = connect(ftp)
+
+    while (userChoice != 5 and userChoice != 0):
       userChoice = int(mainMenu())
 
       if (userChoice == 1):
@@ -101,5 +143,6 @@ def main():
         ftp.quit()
 
 
+# execute main when run
 if __name__ == "__main__":
     main()
