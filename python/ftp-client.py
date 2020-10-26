@@ -1,5 +1,11 @@
 from ftplib import FTP
+import sys
 
+# REQUIRE PYTHON 3
+def requireVersion():
+    if (sys.version_info[0] != 3):
+        print("This script requires Python version 2.6")
+        sys.exit(1)
 
 '''
 ACTION PROMPT / MAIN MENU
@@ -9,6 +15,7 @@ Options are presented as numeric input choices, with the user selecting by numbe
 more information is needed for the operation and thus a prompt follows. Is called after
 an operation, after connection, and if ghe user's input was invalid. 
 '''
+
 def mainMenu():
     userChoice = 0
     choices = ['1', '2', '3', '4', '5']
@@ -75,7 +82,11 @@ def connect(ftp):
     print("URI: ")
     URI = input()
     print("PORT: ")
-    PORT = int(input())
+    try:
+        PORT = int(input())
+    except:
+        print("Invalid Port. Exiting...")
+        sys.exit(1)
     print("USERNAME: ")
     USERNAME = input()
     print("PASSWORD: ")
@@ -119,6 +130,9 @@ Contains the composed logic for the script itself, comprised of
 above functions and branch logic. 
 '''
 def main():
+
+    requireVersion()
+
     ftp = FTP('')
 
     userChoice = connect(ftp)
