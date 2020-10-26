@@ -4,7 +4,7 @@ import sys
 # REQUIRE PYTHON 3
 def requireVersion():
     if (sys.version_info[0] != 3):
-        print("This script requires Python version 2.6")
+        print("This script requires Python version 3.x")
         sys.exit(1)
 
 '''
